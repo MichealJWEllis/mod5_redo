@@ -61,6 +61,8 @@ var auditTask = function(taskEl) {
 
   if(moment().isAfter(time)){
     $(taskEl).addClass("list-group-item-danger");
+  } else if(Math.abs(moment().diff(time, "days")) <= 2) {
+    $(taskEl).addClass("list-group-item-warning");
   }
 }
 
@@ -228,7 +230,7 @@ $("#trash").droppable({
 })
 
 $("#modalDueDate").datepicker({
-  // minDate: 1
+  minDate: 1
 });
 
 
