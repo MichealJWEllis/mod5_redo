@@ -64,6 +64,7 @@ var auditTask = function (taskEl) {
   } else if (Math.abs(moment().diff(time, "days")) <= 2) {
     $(taskEl).addClass("list-group-item-warning");
   }
+  // console.log(taskEl);
 }
 
 $(".list-group").on("click", "p", function () {
@@ -178,15 +179,21 @@ $(".card .list-group").sortable({
   helper: "clone",
   activate: function (event) {
     //console.log("activate", this);
+    $(this).addClass("dropover");
+    $(".bottom-trash").addClass("bottom-trash-drag");
   },
   deactivate: function (event) {
     //console.log("deactivate", this);
+    $(this).removeClass("dropover");
+    $(".bottom-trash").removeClass("bottom-trash-drag");
   },
   over: function (event) {
     //console.log("over", this);
+    $(event.target).addClass("dropover-active");
   },
   out: function (event) {
     // console.log("out", this);
+    $(event.target).removeClass("dropover-active");
   },
   update: function (event) {
     var tempArr = [];
@@ -222,13 +229,16 @@ $("#trash").droppable({
   tolerance: "touch",
   drop: function (event, ui) {
     ui.draggable.remove();
-    console.log("drop");
+    //console.log("drop");
+    $(".bottom-trash").removeClass("bottom-trash-active");
   },
   over: function (event, ui) {
-    console.log("over");
+    //console.log("over");
+    $(".bottom-trash").addClass("bottom-trash-active");
   },
   out: function (event, ui) {
-    console.log("out");
+    //console.log("out");
+    $(".bottom-trash").removeClass("bottom-trash-active");
   }
 })
 
@@ -283,4 +293,9 @@ $("#remove-tasks").on("click", function () {
 // load tasks for the first time
 loadTasks();
 
+setInterval(function () {
+  $(".card .list-group-item").each(function (index, el) {
+    auditTask(el);
+  })
+}, (1000 * 60) * 30);
 
